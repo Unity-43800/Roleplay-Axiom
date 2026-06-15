@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Panthéon des Voies — Création de Personnage</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080610;
+    --deep: #0E0B1A;
+    --surface: #14102A;
+    --panel: #1A1530;
+    --border: #2E2550;
+    --violet: #7F77DD;
+    --violet-light: #AFA9EC;
+    --violet-dim: #3C3489;
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dim: #7A5E1A;
+    --text: #E8E4F4;
+    --text-dim: #9B96B8;
+    --text-faint: #514D6E;
+    --glow: rgba(127, 119, 221, 0.15);
+    --gold-glow: rgba(201, 168, 76, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Crimson Text', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── PARTICULES ── */
+  #stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d, 3s) var(--delay, 0s) infinite alternate ease-in-out;
+  }
+  @keyframes twinkle { from { opacity: 0.1; } to { opacity: 0.7; } }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(8, 6, 16, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    scroll-margin-top: 56px;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp .8s .2s forwards;
+  }
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(36px, 7vw, 84px);
+    font-weight: 700;
+    line-height: 1.05;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--violet-light) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp .8s .4s forwards;
+  }
+  .hero-sub {
+    font-size: 20px;
+    font-style: italic;
+    color: var(--text-dim);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp .8s .6s forwards;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp .8s .8s forwards;
+  }
+  .btn-primary {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .85rem 2rem;
+    background: linear-gradient(135deg, var(--violet-dim), var(--violet));
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 20px var(--glow);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--violet), var(--violet-light));
+    box-shadow: 0 0 30px rgba(127,119,221,.35);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .85rem 2rem;
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .2s;
+  }
+  .btn-secondary:hover {
+    background: var(--gold-glow);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2rem;
+    margin: 4rem 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-rune {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: .2em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── GENÈSE ── */
+  #genese {
+    padding: 5rem 2rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2.5rem;
+    line-height: 1.2;
+  }
+  .genese-text {
+    font-size: 18px;
+    line-height: 1.9;
+    color: var(--text-dim);
+  }
+  .genese-text p { margin-bottom: 1.2rem; }
+  .genese-text em { color: var(--violet-light); font-style: italic; }
+  .genese-text strong { color: var(--gold-light); font-weight: 600; font-style: normal; }
+  .genese-quote {
+    border-left: 2px solid var(--violet);
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    background: var(--glow);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--violet-light);
+    font-size: 17px;
+  }
+
+  /* ── QUIZ ── */
+  #quiz {
+    padding: 5rem 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .quiz-intro {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .quiz-container {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 0 40px var(--glow);
+  }
+  .quiz-step { display: none; }
+  .quiz-step.active { display: block; animation: fadeIn .4s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .quiz-question {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: .5rem;
+    line-height: 1.4;
+  }
+  .quiz-num {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: .15em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .quiz-options {
+    display: grid;
+    gap: .75rem;
+    margin-top: 1.5rem;
+  }
+  .quiz-option {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 17px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .quiz-option:hover {
+    border-color: var(--violet);
+    color: var(--text);
+    background: var(--glow);
+  }
+  .quiz-option.selected {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: var(--gold-glow);
+  }
+  .option-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: .6;
+  }
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  .quiz-progress {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: .1em;
+  }
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--violet), var(--gold));
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+
+  /* ── RÉSULTAT QUIZ ── */
+  #quiz-result {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+    animation: fadeIn .6s;
+  }
+  .result-voie-icon { font-size: 64px; margin-bottom: 1rem; }
+  .result-voie-name {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    color: var(--gold-light);
+    margin-bottom: .5rem;
+  }
+  .result-voie-dieu {
+    font-size: 16px;
+    color: var(--text-faint);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: .05em;
+  }
+  .result-desc {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+  }
+  .result-quote {
+    font-style: italic;
+    color: var(--violet-light);
+    font-size: 18px;
+    margin: 1.5rem auto;
+    max-width: 400px;
+  }
+  .result-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+
+  /* ── VOIES ── */
+  #voies {
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .voies-header { text-align: center; margin-bottom: 3rem; }
+  .voies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+  .voie-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .voie-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity .3s;
+    border-radius: 14px;
+  }
+  .voie-card:hover { transform: translateY(-3px); border-color: var(--violet); }
+  .voie-card:hover::before { opacity: 1; background: var(--glow); }
+  .voie-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .voie-icon { font-size: 32px; flex-shrink: 0; line-height: 1; }
+  .voie-name {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .voie-dieu {
+    font-size: 13px;
+    color: var(--text-faint);
+    font-style: italic;
+  }
+  .voie-keywords {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: .75rem;
+  }
+  .voie-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .voie-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-bottom: 1rem;
+  }
+  .trait {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: rgba(127,119,221,.12);
+    border: 1px solid rgba(127,119,221,.25);
+    color: var(--violet-light);
+    font-family: 'Cinzel', serif;
+    letter-spacing: .04em;
+  }
+  .voie-citation {
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-faint);
+    border-top: 1px solid var(--border);
+    padding-top: .75rem;
+    margin-top: .75rem;
+  }
+
+  /* ── MODAL VOIE ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(8,6,16,.9);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; animation: fadeIn .3s; }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--violet);
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 600px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 60px var(--glow);
+  }
+  .modal-close {
+    position: absolute;
+    top: 1.25rem; right: 1.25rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+  }
+  .modal-close:hover { border-color: var(--violet); color: var(--text); }
+  .modal-icon { font-size: 48px; margin-bottom: 1rem; }
+  .modal-name {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    color: var(--gold-light);
+    margin-bottom: .25rem;
+  }
+  .modal-dieu {
+    font-size: 15px;
+    color: var(--text-faint);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    font-family: 'Cinzel', serif;
+  }
+  .modal-section { margin-bottom: 1.5rem; }
+  .modal-section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: .75rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-desc { font-size: 17px; color: var(--text-dim); line-height: 1.8; }
+  .modal-traits { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+  .modal-quote {
+    font-style: italic;
+    font-size: 18px;
+    color: var(--violet-light);
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--glow);
+    margin-top: 1rem;
+  }
+
+  /* ── FICHE ── */
+  #fiche {
+    padding: 5rem 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .fiche-intro { text-align: center; margin-bottom: 3rem; }
+  .fiche-form {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 0 40px var(--glow);
+  }
+  .fiche-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .fiche-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .fiche-section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .fiche-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .field-group { margin-bottom: 1.25rem; }
+  .field-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--violet-light);
+    margin-bottom: .5rem;
+  }
+  .field-hint {
+    font-size: 14px;
+    color: var(--text-faint);
+    font-style: italic;
+    margin-bottom: .5rem;
+    line-height: 1.5;
+  }
+  .field-input, .field-textarea, .field-select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    color: var(--text);
+    font-family: 'Crimson Text', serif;
+    font-size: 17px;
+    transition: border-color .2s;
+    outline: none;
+    resize: vertical;
+  }
+  .field-input:focus, .field-textarea:focus, .field-select:focus {
+    border-color: var(--violet);
+    box-shadow: 0 0 0 2px var(--glow);
+  }
+  .field-textarea { min-height: 100px; }
+  .field-select option { background: var(--deep); }
+
+  .voie-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: .6rem;
+    margin-top: .5rem;
+  }
+  .voie-select-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .6rem .75rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: var(--text-dim);
+    font-family: 'Crimson Text', serif;
+    font-size: 15px;
+  }
+  .voie-select-btn:hover { border-color: var(--violet); color: var(--text); }
+  .voie-select-btn.selected {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: var(--gold-glow);
+  }
+  .voie-select-icon { font-size: 18px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  .copy-btn {
+    width: 100%;
+    margin-top: 2rem;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--violet-dim), var(--violet));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .2s;
+    box-shadow: 0 0 20px var(--glow);
+  }
+  .copy-btn:hover {
+    background: linear-gradient(135deg, var(--violet), var(--violet-light));
+    transform: translateY(-1px);
+  }
+  .copy-feedback {
+    text-align: center;
+    margin-top: .75rem;
+    font-size: 14px;
+    color: var(--gold);
+    font-style: italic;
+    min-height: 20px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-faint);
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 1rem; }
+    .voies-grid { grid-template-columns: 1fr; }
+    .fiche-form { padding: 1.5rem; }
+    .quiz-container { padding: 1.5rem; }
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--deep); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--violet-dim); }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<nav>
+  <span class="nav-logo">Panthéon des Voies</span>
+  <ul class="nav-links">
+    <li><a href="#genese">Genèse</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#voies">Les Voies</a></li>
+    <li><a href="#fiche">Créer</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">Axiøm · Panthéon des Voies</p>
+  <h1 class="hero-title">Quelle est<br>ta Voie ?</h1>
+  <p class="hero-sub">Chaque être de cet univers suit un chemin. Découvre le tien, explore les dieux qui gouvernent la causalité, et crée ton personnage.</p>
+  <div class="hero-cta">
+    <a href="#quiz" class="btn-primary">Trouver ma Voie</a>
+    <a href="#fiche" class="btn-secondary">Créer mon personnage</a>
+  </div>
+</section>
+
+<!-- GENÈSE -->
+<section id="genese">
+  <span class="section-eyebrow">Origine</span>
+  <h2 class="section-title">La Légende de la Création</h2>
+  <div class="genese-text">
+    <p>Vous a-t-on déjà parlé clairement de ce qui existait avant l'univers ? On vous dira qu'il n'y avait rien. Un vide absolu, silencieux, sans forme ni fin. Mais ce n'est qu'une <em>vérité incomplète</em>.</p>
+    <p>Car dans ce néant sans mesure… deux présences existaient. Elles n'avaient ni nom, ni corps, ni pensée telle que nous la comprenons. Elles étaient confondues avec le vide lui-même ; immobiles, éternelles, parfaites dans leur inexistence.</p>
+    <p>Et pourtant… l'une d'elles ressentit une faille. Un trouble imperceptible. Un refus. Car exister sans être… n'était pas exister.</p>
+    <div class="genese-quote">Cette volonté devint conscience. Cette conscience devint désir. Et ce désir… devint <strong>Kenjaku</strong>.</div>
+    <p>Par sa seule pensée, il brisa l'immobilité. Il traça la première ligne là où rien ne pouvait être tracé. Il forgea la causalité : le lien entre chaque chose, la loi qui donne une suite au chaos. <em>Car comprendre, c'est lier. Et lier, c'est créer.</em></p>
+    <p>Mais toute création appelle une opposition. Son jumeau, resté fidèle au néant originel, refusa cette rupture. Il fut rejeté hors de la trame naissante, banni au-delà de la causalité — ainsi fut exilé celui que l'on nomme désormais <strong>Kye Sook, le Dissident</strong>.</p>
+    <p>Et le monde… put enfin commencer. Car Kenjaku, désormais seul, ne créa pas par amour, ni par bonté : mais par nécessité. Il engendra les <strong>Voies</strong>, principes absolus destinés à structurer toute chose.</p>
+    <div class="genese-quote">Et si parfois le doute s'insinue, si des voix murmurent que tout cela n'aurait jamais dû être… ce ne sont que les échos du frère déchu, qui tente encore de convaincre l'existence de disparaître.</div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="quiz-intro">
+    <span class="section-eyebrow">Découverte</span>
+    <h2 class="section-title">Trouver ta Voie</h2>
+    <p style="color:var(--text-dim);font-size:17px;font-style:italic;">Réponds honnêtement. La causalité ne ment pas.</p>
+  </div>
+
+  <div class="quiz-container" id="quiz-container">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <!-- Q1 -->
+    <div class="quiz-step active" data-q="0">
+      <span class="quiz-num">Question 1 / 8</span>
+      <p class="quiz-question">Face à un système injuste, quelle est ta réaction instinctive ?</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Destruction"><span class="option-letter">A</span>Le briser pour reconstruire autrement.</button>
+        <button class="quiz-option" data-voie="Harmonie"><span class="option-letter">B</span>Rassembler des alliés pour le changer ensemble.</button>
+        <button class="quiz-option" data-voie="Érudition"><span class="option-letter">C</span>L'analyser jusqu'à en comprendre les failles.</button>
+        <button class="quiz-option" data-voie="Nihilité"><span class="option-letter">D</span>Observer. Il finira par s'effondrer seul.</button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-step" data-q="1">
+      <span class="quiz-num">Question 2 / 8</span>
+      <p class="quiz-question">Quelqu'un que tu aimes souffre. Tu fais quoi ?</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Abondance"><span class="option-letter">A</span>Tu restes à ses côtés. Coûte que coûte.</button>
+        <button class="quiz-option" data-voie="Souvenir"><span class="option-letter">B</span>Tu l'écoutes. Tu gardes tout ce qu'il dit.</button>
+        <button class="quiz-option" data-voie="Chasse"><span class="option-letter">C</span>Tu cherches la cause. Et tu l'éradiques.</button>
+        <button class="quiz-option" data-voie="Harmonie"><span class="option-letter">D</span>Tu tentes de réconcilier ce qui a été brisé.</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-step" data-q="2">
+      <span class="quiz-num">Question 3 / 8</span>
+      <p class="quiz-question">Ce qui te définit le mieux ?</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Propagation"><span class="option-letter">A</span>Ma capacité à me répandre, à m'adapter, à survivre partout.</button>
+        <button class="quiz-option" data-voie="Beauté"><span class="option-letter">B</span>Ce que j'inspire aux autres quand ils me regardent.</button>
+        <button class="quiz-option" data-voie="Chasse"><span class="option-letter">C</span>La clarté de mon objectif. Je sais toujours ce que je veux.</button>
+        <button class="quiz-option" data-voie="Énigmata"><span class="option-letter">D</span>Ce que personne ne comprend vraiment de moi.</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-step" data-q="3">
+      <span class="quiz-num">Question 4 / 8</span>
+      <p class="quiz-question">Ta plus grande peur ?</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Abondance"><span class="option-letter">A</span>Que quelqu'un que j'aime disparaisse et que je n'aie rien pu faire.</button>
+        <button class="quiz-option" data-voie="Propagation"><span class="option-letter">B</span>Être effacé. Ne laisser aucune trace.</button>
+        <button class="quiz-option" data-voie="Nihilité"><span class="option-letter">C</span>Être dupé par des illusions auxquelles j'aurais cru.</button>
+        <button class="quiz-option" data-voie="Destruction"><span class="option-letter">D</span>Que tout continue comme avant. Que rien ne change jamais.</button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-step" data-q="4">
+      <span class="quiz-num">Question 5 / 8</span>
+      <p class="quiz-question">Comment tu vis le temps ?</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Souvenir"><span class="option-letter">A</span>Je vis dans le passé. Les souvenirs sont plus réels que le présent.</button>
+        <button class="quiz-option" data-voie="Allégresse"><span class="option-letter">B</span>Dans l'instant. Après n'existe pas encore.</button>
+        <button class="quiz-option" data-voie="Chasse"><span class="option-letter">C</span>Vers l'avant. Tout se mesure à l'avancement vers mon but.</button>
+        <button class="quiz-option" data-voie="Érudition"><span class="option-letter">D</span>Je l'observe. Il contient des lois que je cherche à comprendre.</button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-step" data-q="5">
+      <span class="quiz-num">Question 6 / 8</span>
+      <p class="quiz-question">On te demande de trahir quelqu'un pour une cause plus grande. Tu...</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Chasse"><span class="option-letter">A</span>Tu le fais. Le but prime sur tout.</button>
+        <button class="quiz-option" data-voie="Harmonie"><span class="option-letter">B</span>Tu cherches une troisième voie. Il doit exister un accord.</button>
+        <button class="quiz-option" data-voie="Nihilité"><span class="option-letter">C</span>Tu observes. La trahison est inévitable dans tout système.</button>
+        <button class="quiz-option" data-voie="Abondance"><span class="option-letter">D</span>Tu refuses. On ne sacrifie pas ce qu'on aime.</button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-step" data-q="6">
+      <span class="quiz-num">Question 7 / 8</span>
+      <p class="quiz-question">Ce que tu veux laisser derrière toi ?</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Propagation"><span class="option-letter">A</span>Une trace partout. Que mon passage ait changé quelque chose.</button>
+        <button class="quiz-option" data-voie="Beauté"><span class="option-letter">B</span>Un souvenir inoubliable. Que ceux qui m'ont vu ne m'oublient jamais.</button>
+        <button class="quiz-option" data-voie="Destruction"><span class="option-letter">C</span>Un monde différent. Même si c'est dans les décombres.</button>
+        <button class="quiz-option" data-voie="Souvenir"><span class="option-letter">D</span>La mémoire de ce qui a existé. Que rien ne soit oublié.</button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="quiz-step" data-q="7">
+      <span class="quiz-num">Question 8 / 8</span>
+      <p class="quiz-question">Une phrase qui résonne en toi ?</p>
+      <div class="quiz-options">
+        <button class="quiz-option" data-voie="Nihilité"><span class="option-letter">A</span>« Tout s'efface. Mais pas encore. »</button>
+        <button class="quiz-option" data-voie="Allégresse"><span class="option-letter">B</span>« Si tout doit finir… dansons jusqu'à ce que l'univers s'effondre. »</button>
+        <button class="quiz-option" data-voie="Énigmata"><span class="option-letter">C</span>« Je suis ce que tu crois… et ce que tu ne sauras jamais. »</button>
+        <button class="quiz-option" data-voie="Érudition"><span class="option-letter">D</span>« Je veux tout savoir. Même ce que je ne devrais pas. »</button>
+      </div>
+    </div>
+
+    <!-- RÉSULTAT -->
+    <div id="quiz-result">
+      <div class="result-voie-icon" id="result-icon"></div>
+      <div class="result-voie-name" id="result-name"></div>
+      <div class="result-voie-dieu" id="result-dieu"></div>
+      <p class="result-desc" id="result-desc"></p>
+      <p class="result-quote" id="result-quote"></p>
+      <div class="result-actions">
+        <button class="btn-primary" onclick="scrollToFiche()">Créer mon personnage</button>
+        <button class="btn-secondary" onclick="resetQuiz()">Recommencer</button>
+      </div>
+    </div>
+
+    <div class="quiz-nav" id="quiz-nav">
+      <button class="btn-secondary" id="quiz-prev" onclick="prevStep()" style="display:none">← Précédent</button>
+      <span class="quiz-progress" id="quiz-progress-text">Choisis une réponse pour continuer</span>
+      <button class="btn-primary" id="quiz-next" onclick="nextStep()" disabled>Suivant →</button>
+    </div>
+  </div>
+</section>
+
+<!-- VOIES -->
+<section id="voies">
+  <div class="voies-header">
+    <span class="section-eyebrow">Les Principes</span>
+    <h2 class="section-title">Les Voies de l'Univers</h2>
+    <p style="color:var(--text-dim);font-size:17px;font-style:italic;max-width:500px;margin:0 auto;">Clique sur une Voie pour en savoir plus.</p>
+  </div>
+  <div class="voies-grid" id="voies-grid"></div>
+</section>
+
+<!-- FICHE -->
+<section id="fiche">
+  <div class="fiche-intro">
+    <span class="section-eyebrow">Création</span>
+    <h2 class="section-title">Créer ton Personnage</h2>
+    <p style="color:var(--text-dim);font-size:17px;font-style:italic;max-width:520px;margin:0 auto;">Remplis ce guide pour développer ton personnage. Utilise-le comme base pour ta fiche Discord.</p>
+  </div>
+
+  <div class="fiche-form">
+
+    <!-- IDENTITÉ -->
+    <div class="fiche-section">
+      <div class="fiche-section-title">Identité</div>
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Nom de famille</label>
+          <p class="field-hint">Si enfant d'un dieu : porte le nom Kenjaku. Sinon, à toi de choisir.</p>
+          <input class="field-input" type="text" placeholder="ex : Kenjaku" id="f-nom">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Prénom</label>
+          <input class="field-input" type="text" placeholder="ex : Ju Fa" id="f-prenom">
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Nom de divinité</label>
+          <p class="field-hint">Le nom sous lequel il·elle est adoré·e ou craint·e.</p>
+          <input class="field-input" type="text" placeholder="ex : Ashuku" id="f-divinite">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Statut</label>
+          <select class="field-select" id="f-statut">
+            <option value="">— Choisir —</option>
+            <option>Dieu / Déesse (Voie principale)</option>
+            <option>Demi-dieu / Demi-déesse</option>
+            <option>Héritier·e divin·e</option>
+            <option>Émanateur·trice</option>
+            <option>Mortel·le</option>
+            <option>Autre</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- VOIE -->
+    <div class="fiche-section">
+      <div class="fiche-section-title">Voie</div>
+      <div class="field-group">
+        <label class="field-label">Sa Voie</label>
+        <p class="field-hint">Le principe cosmique qui définit son chemin de vie. Clique pour sélectionner.</p>
+        <div class="voie-selector" id="voie-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Rapport à sa Voie</label>
+        <p class="field-hint">Est-il·elle en accord avec sa Voie ? En conflit ? Dans le déni ? Nuance ici.</p>
+        <textarea class="field-textarea" id="f-rapport-voie" placeholder="ex : Ju Fa incarne pleinement la Destruction mais son amour pour Tao Fa crée une contradiction qu'il refuse de regarder..."></textarea>
+      </div>
+    </div>
+
+    <!-- ROYAUME -->
+    <div class="fiche-section">
+      <div class="fiche-section-title">Royaume & Origine</div>
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Royaume d'appartenance</label>
+          <select class="field-select" id="f-royaume">
+            <option value="">— Choisir —</option>
+            <option>Axiøm (siège du Panthéon)</option>
+            <option>Akropis (Destruction)</option>
+            <option>Planète de l'Énigmata</option>
+            <option>Royaume de l'Abondance</option>
+            <option>Monde de One Piece</option>
+            <option>Monde de Honkai Star Rail</option>
+            <option>Monde de Genshin Impact</option>
+            <option>Autre — à préciser</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Origine / Univers de base</label>
+          <input class="field-input" type="text" placeholder="ex : One Piece, TGCF, OC..." id="f-origine">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Rôle dans son royaume</label>
+        <p class="field-hint">Gouvernant·e, guerrier·e, fonctionnaire, exilé·e... comment est-il·elle perçu·e ?</p>
+        <textarea class="field-textarea" id="f-role" style="min-height:70px;" placeholder="ex : Seigneur ravageur d'Akropis, craint de tous, loyal à Tao Fa seule..."></textarea>
+      </div>
+    </div>
+
+    <!-- PERSONNALITÉ -->
+    <div class="fiche-section">
+      <div class="fiche-section-title">Personnalité</div>
+      <div class="field-group">
+        <label class="field-label">En surface — ce que les autres voient</label>
+        <p class="field-hint">La façade, le masque, la première impression.</p>
+        <textarea class="field-textarea" id="f-surface" placeholder="ex : Colérique, méprisant, sauvage. Il ne connaît pas la nuance..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">En profondeur — ce qu'on ne voit pas</label>
+        <p class="field-hint">Ce qui se cache derrière. Contradictions, blessures, désirs inavoués.</p>
+        <textarea class="field-textarea" id="f-profond" placeholder="ex : Derrière la brutalité, une loyauté absolue et une empathie cachée qu'il refuse de montrer..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">MBTI (optionnel)</label>
+        <input class="field-input" type="text" placeholder="ex : INTJ, ENFP..." id="f-mbti" style="max-width:200px;">
+      </div>
+    </div>
+
+    <!-- BACKGROUND -->
+    <div class="fiche-section">
+      <div class="fiche-section-title">Background</div>
+      <div class="field-group">
+        <label class="field-label">Histoire</label>
+        <p class="field-hint">Origines, événements fondateurs, ce qui l'a façonné·e. Reste en accord avec le lore du Panthéon.</p>
+        <textarea class="field-textarea" style="min-height:140px;" id="f-histoire" placeholder="ex : Né·e le 01/09/0000 de Kenjaku, Ju Fa fut le quatrième des dieux à voir le jour, à la seconde près..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">La blessure centrale</label>
+        <p class="field-hint">Ce qui le·la définit en négatif. Ce qu'il·elle ne guérira peut-être jamais.</p>
+        <textarea class="field-textarea" style="min-height:80px;" id="f-blessure" placeholder="ex : Il ne peut pas concevoir un monde sans elle. Cette dépendance le rend vulnérable d'une façon qu'il refuse de voir..."></textarea>
+      </div>
+    </div>
+
+    <!-- LIENS -->
+    <div class="fiche-section">
+      <div class="fiche-section-title">Liens & Relations</div>
+      <div class="field-group">
+        <label class="field-label">Liens avec d'autres personnages</label>
+        <p class="field-hint">Famille, alliés, ennemis, amours, rivaux... Cite des persos existants du serveur si possible.</p>
+        <textarea class="field-textarea" style="min-height:120px;" id="f-liens" placeholder="ex : Âme sœur de Tao Fa (Abondance). Père de Mydei (Conflit). Mépris pour Kenjaku qu'il ne montre jamais ouvertement..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Relation à Kenjaku</label>
+        <p class="field-hint">Comment perçoit-il·elle le Dieu originel ? Déférence, rébellion, peur, indifférence ?</p>
+        <textarea class="field-textarea" style="min-height:70px;" id="f-kenjaku" placeholder="ex : Ju Fa obéit à Kenjaku sans le dire. Mais il sait que Kenjaku se sert de Tao Fa comme levier sur lui."></textarea>
+      </div>
+    </div>
+
+    <!-- OBJECTIF NARRATIF -->
+    <div class="fiche-section">
+      <div class="fiche-section-title">Objectif Narratif</div>
+      <div class="field-group">
+        <label class="field-label">Ce qu'il·elle veut dans le RP</label>
+        <p class="field-hint">Pas ce que le personnage dit vouloir — ce qu'il·elle veut vraiment au fond. Ce qui motive ses actions.</p>
+        <textarea class="field-textarea" id="f-objectif" placeholder="ex : Protéger Tao Fa de tout ce qu'elle crée, y compris d'elle-même. Même s'il faut détruire ce qui lui est cher pour y parvenir..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Arc potentiel</label>
+        <p class="field-hint">Quel chemin narratif tu imagines pour ce perso ? Évolution, chute, révélation ?</p>
+        <textarea class="field-textarea" id="f-arc" placeholder="ex : Un arc autour de la mort de Tao Fa — comment Ju Fa sans frein devient la plus grande menace cosmique du Panthéon..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Ce que tu veux jouer comme joueur·se</label>
+        <p class="field-hint">Ton envie à toi — les types de scènes, les dynamiques, l'ambiance que tu cherches.</p>
+        <textarea class="field-textarea" id="f-envie" placeholder="ex : Des scènes de tension politique, des moments intimes rares avec Tao Fa, et au moins une confrontation avec Griffith..."></textarea>
+      </div>
+    </div>
+
+    <button class="copy-btn" onclick="copyFiche()">Copier ma fiche</button>
+    <p class="copy-feedback" id="copy-feedback"></p>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalDirect()">×</button>
+    <div class="modal-icon" id="modal-icon"></div>
+    <div class="modal-name" id="modal-name"></div>
+    <div class="modal-dieu" id="modal-dieu"></div>
+    <div class="modal-section">
+      <div class="modal-section-title">Philosophie</div>
+      <p class="modal-desc" id="modal-desc"></p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Personnalité type</div>
+      <div class="modal-traits" id="modal-traits"></div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Pour jouer cette Voie</div>
+      <p class="modal-desc" id="modal-jouer"></p>
+    </div>
+    <div class="modal-quote" id="modal-quote"></div>
+  </div>
+</div>
+
+<footer>
+  <p>Le Panthéon des Voies · Avant toute chose, il y eut Kenjaku.</p>
+  <p style="margin-top:.5rem;font-size:12px;">Document interne — Axiøm, Bureau de Gestion Administrative, guichet 3.</p>
+</footer>
+
+<script>
+// ── DATA ──
+const VOIES = [
+  {
+    id: 'Destruction', icon: '💥', name: 'La Destruction', dieu: 'Kenjaku Ju Fa', kingdom: 'Akropis',
+    keywords: 'Rupture · Rejet · Fracture',
+    desc: 'Détruire pour révéler la vérité brute. Tout ce qui existe est condamné, donc autant hâter la fin. Ce dieu croit que l\'effondrement est la seule forme honnête de changement.',
+    traits: ['Rebelle', 'Instable ou déterminé', 'Vit dans le conflit', 'Refuse les compromis', 'Ne craint pas la douleur'],
+    jouer: 'Joue quelqu\'un qui n\'accepte pas l\'immobilisme. Chaque scène doit mener quelque part — même si c\'est vers le pire. Ton personnage brise pour reconstruire, ou juste pour briser.',
+    quote: '« Le monde est brisé ? Je le briserai plus encore. Puis je reconstruirai. »'
+  },
+  {
+    id: 'Abondance', icon: '🌱', name: 'L\'Abondance', dieu: 'Kenjaku Tao Fa', kingdom: 'Royaume de l\'Abondance',
+    keywords: 'Guérison · Survie · Croissance',
+    desc: 'Faire durer la vie à tout prix. Multiplier, soigner, faire croître sans se demander si cela doit s\'arrêter. Le sens vient de la continuité, pas de la limite.',
+    traits: ['Altruiste', 'Bienveillant', 'Parfois naïf', 'S\'attache facilement', 'Obsessionnel dans le sauvetage'],
+    jouer: 'Joue quelqu\'un dont l\'amour est sa force et son aveuglement. Il ou elle ne peut pas abandonner — même quand ce serait la bonne décision. La tendresse comme addiction.',
+    quote: '« Tant qu\'un cœur bat, je ne renoncerai pas. »'
+  },
+  {
+    id: 'Nihilité', icon: '🕳️', name: 'La Nihilité', dieu: 'Kenjaku Mu Dan', kingdom: 'Axiøm',
+    keywords: 'Vide · Érosion · Non-sens',
+    desc: 'Accepter que rien n\'ait de sens objectif. Ce dieu ne détruit pas : il observe le vide et refuse de le combler par des illusions. La paix par le non-attachement.',
+    traits: ['Cynique', 'Lucide', 'Fataliste', 'Ironique', 'Froidement réaliste'],
+    jouer: 'Joue quelqu\'un qui voit à travers tout — et qui ne peut pas s\'empêcher de le dire, ou de ne rien dire. Le détachement comme armure. Mais quelque chose résiste encore, sinon il ou elle n\'agirait pas du tout.',
+    quote: '« Tout s\'efface. Moi aussi. Mais pas encore. »'
+  },
+  {
+    id: 'Harmonie', icon: '🎺', name: 'L\'Harmonie', dieu: 'Kenjaku Zhu Jin', kingdom: 'Axiøm',
+    keywords: 'Unité · Soutien · Synchronisation',
+    desc: 'Accorder les volontés individuelles en un ensemble fonctionnel. Le but n\'est pas l\'unicité, mais la synchronisation. Le conflit est vu comme une dissonance à corriger.',
+    traits: ['Charismatique', 'Coopératif', 'Idéaliste', 'Stratège', 'Rassembleur·se'],
+    jouer: 'Joue quelqu\'un qui lit les dynamiques de groupe instinctivement. Ton perso n\'est jamais vraiment seul dans une scène — il ou elle relie les autres, parfois sans que ce soit voulu.',
+    quote: '« Ce n\'est pas ma force seule… mais notre lien qui nous fera gagner. »'
+  },
+  {
+    id: 'Érudition', icon: '🧠', name: 'L\'Érudition', dieu: 'Kenjaku Gui Fa', kingdom: 'Axiøm',
+    keywords: 'Connaissance · Logique · Maîtrise',
+    desc: 'Comprendre l\'univers jusqu\'à l\'épuiser. Accumuler savoir, logique et lois. Le monde n\'a de valeur que s\'il peut être expliqué.',
+    traits: ['Curieux', 'Méthodique', 'Parfois arrogant', 'Distant', 'Fasciné par l\'abstrait'],
+    jouer: 'Joue quelqu\'un qui analyse avant d\'agir — souvent trop longtemps. Ton perso est rarement surpris, mais parfois paralysé par ce qu\'il sait. La connaissance peut être une cage.',
+    quote: '« Je veux tout savoir. Même ce que je ne devrais pas. »'
+  },
+  {
+    id: 'Propagation', icon: '🦟', name: 'La Propagation', dieu: 'Kenjaku Ran', kingdom: 'Axiøm',
+    keywords: 'Multiplication · Survie · Infiltration',
+    desc: 'Se répandre sans fin. Créer, infecter, multiplier, peu importe la forme. L\'existence se justifie par sa capacité à continuer ailleurs, autrement.',
+    traits: ['Envahissant', 'Arriviste', 'Instinct de survie', 'Hypocrite en surface', 'Omniprésent'],
+    jouer: 'Joue quelqu\'un qui ne prend jamais de risques frontaux — il ou elle contourne, s\'infiltre, laisse des traces partout. Le vrai pouvoir est invisible jusqu\'à ce qu\'il soit trop tard.',
+    quote: '« La survie passe par la reproduction. Je ne veux pas disparaître. »'
+  },
+  {
+    id: 'Chasse', icon: '🎯', name: 'La Chasse', dieu: 'Griffith', kingdom: 'Axiøm',
+    keywords: 'Cible · Objectif · Inévitabilité',
+    desc: 'Réduire le monde à une cible. Donner un sens à l\'existence par la poursuite et l\'élimination de ce qui est jugé "à abattre". Le but n\'est pas la paix, mais la clarté.',
+    traits: ['Focalisé', 'Froid ou passionné', 'Obsédé par sa mission', 'Solitaire', 'Ne recule devant rien'],
+    jouer: 'Joue quelqu\'un avec un but si net qu\'il ou elle élimine tout ce qui n\'y contribue pas — y compris des liens qu\'il ou elle aurait pu aimer. La clarté comme sacrifice.',
+    quote: '« Tant que ma cible respire, je n\'ai pas terminé. »'
+  },
+  {
+    id: 'Beauté', icon: '🌹', name: 'La Beauté', dieu: 'Kenjaku Jinshi', kingdom: 'Axiøm',
+    keywords: 'Esthétique · Idéal · Contemplation',
+    desc: 'Exister pour être contemplé. Donner un sens par l\'esthétique, l\'émotion, l\'idéal. Même la souffrance peut être justifiée si elle est belle.',
+    traits: ['Sensible', 'Idéaliste', 'Magnétique', 'Narcissique en surface', 'Dangereusement détaché du réel'],
+    jouer: 'Joue quelqu\'un qui juge tout sur ce que ça inspire, pas sur ce que ça fait. Attention — derrière l\'arrogance, il y a souvent quelqu\'un qui doute profondément de sa propre valeur.',
+    quote: '« Ce qui est beau mérite d\'exister, même un instant. »'
+  },
+  {
+    id: 'Souvenir', icon: '⌛', name: 'Le Souvenir', dieu: 'Undertaker', kingdom: 'Axiøm',
+    keywords: 'Rappel · Mémoire · Traces du passé',
+    desc: 'Refuser que le passé disparaisse. Donner une éternité aux expériences vécues. Ce dieu croit que l\'identité survit tant que quelqu\'un se souvient.',
+    traits: ['Silencieux', 'Contemplatif', 'Nostalgique', 'Poétique', 'Mélancolique'],
+    jouer: 'Joue quelqu\'un qui vit dans les résonances. Les morts ont autant de poids que les vivants. Chaque scène s\'écrit sur le fond de ce qui a été — et de ce qui ne sera plus.',
+    quote: '« Tout s\'oublie. Mais moi… je me souviendrai pour vous. »'
+  },
+  {
+    id: 'Énigmata', icon: '❓', name: 'L\'Énigmata', dieu: 'Kye Sook', kingdom: 'Planète 43',
+    keywords: 'Paradoxe · Masque · Mystère',
+    desc: 'Cacher la vérité pour préserver le mystère. Ce dieu estime que connaître détruit, que révéler appauvrit. Le secret est plus sacré que la réponse.',
+    traits: ['Ambigu', 'Insaisissable', 'Parle par énigmes', 'Se nourrit de dualité', 'Incompris'],
+    jouer: 'Joue quelqu\'un dont on ne comprend jamais vraiment les motivations — même après des heures de scènes. Chaque révélation ouvre une nouvelle question. L\'identité comme labyrinthe.',
+    quote: '« Je suis ce que tu crois… et ce que tu ne sauras jamais. »'
+  },
+  {
+    id: 'Allégresse', icon: '🎉', name: 'L\'Allégresse', dieu: 'Kye Rong', kingdom: 'Axiøm',
+    keywords: 'Extase · Ivresse · Instant présent',
+    desc: 'Jouir de l\'existence sans chercher de justification. Ce dieu rit face au sens, au non-sens, au tragique. La vie est un spectacle, un jeu, une farce cosmique à savourer.',
+    traits: ['Exubérant', 'Exalté', 'Lumineux', 'Insouciant', 'Déroutant de vérité brutale'],
+    jouer: 'Joue quelqu\'un qui apporte de l\'énergie dans chaque scène — même les plus sombres. Pas de la légèreté naïve, mais l\'acceptation joyeuse que tout peut s\'effondrer et qu\'on peut danser quand même.',
+    quote: '« Si tout doit finir… dansons jusqu\'à ce que l\'univers s\'effondre. »'
+  },
+  {
+    id: 'Voracité', icon: '🫗', name: 'La Voracité', dieu: '???', kingdom: 'Inconnu',
+    keywords: 'Faim · Vol · Obsession',
+    desc: 'Dévorer pour se définir. Tout ce qui existe est une ressource. Ce dieu n\'a pas de fin, seulement une faim éternelle. L\'identité est ce qui a été consommé.',
+    traits: ['Intense', 'Tourmenté', 'Insatiable', 'Jamais satisfait', 'Monstrueux dans sa perte de limites'],
+    jouer: 'Joue quelqu\'un qui veut tout — et qui ne comprend pas toujours pourquoi. La tendresse et la possession se mélangent. L\'amour ressemble à de la prédation. Dangereux, surtout pour lui-même.',
+    quote: '« Si je t\'aime, je te dévore. Si je vis, c\'est pour tout prendre. »'
+  },
+  {
+    id: 'Équilibre', icon: '⚖️', name: 'L\'Équilibre', dieu: '▉▉▉', kingdom: 'Axiøm',
+    keywords: 'Balance · Loi · Neutralité',
+    desc: 'Maintenir la balance cosmique. Ni trop, ni trop peu. Ce dieu sacrifie sans haine pour éviter les extrêmes. La justice comme mécanique froide.',
+    traits: ['Impassible', 'Analytique', 'Détaché en surface', 'Ne cherche ni le bien ni le mal', 'Accepte le sacrifice comme variable'],
+    jouer: 'Joue quelqu\'un qui ne prend jamais parti — mais dont les décisions ont des conséquences plus grandes que n\'importe quelle guerre. La neutralité comme pouvoir absolu.',
+    quote: '« Si tu tombes, ce n\'est pas une punition. C\'est une correction. »'
+  },
+];
+
+// ── STARS ──
+(function() {
+  const c = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + .5;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s`;
+    c.appendChild(s);
+  }
+})();
+
+// ── VOIES GRID ──
+(function() {
+  const grid = document.getElementById('voies-grid');
+  const selector = document.getElementById('voie-selector');
+  VOIES.forEach(v => {
+    // card
+    const card = document.createElement('div');
+    card.className = 'voie-card';
+    card.innerHTML = `
+      <div class="voie-card-top">
+        <div class="voie-icon">${v.icon}</div>
+        <div>
+          <div class="voie-name">${v.name}</div>
+          <div class="voie-dieu">${v.dieu}</div>
+        </div>
+      </div>
+      <div class="voie-keywords">${v.keywords}</div>
+      <p class="voie-desc">${v.desc.substring(0,120)}…</p>
+      <div class="voie-traits">${v.traits.slice(0,3).map(t=>`<span class="trait">${t}</span>`).join('')}</div>
+      <div class="voie-citation">${v.quote}</div>
+    `;
+    card.onclick = () => openModal(v);
+    grid.appendChild(card);
+
+    // selector btn
+    const btn = document.createElement('button');
+    btn.className = 'voie-select-btn';
+    btn.dataset.voie = v.id;
+    btn.innerHTML = `<span class="voie-select-icon">${v.icon}</span>${v.name}`;
+    btn.onclick = () => {
+      document.querySelectorAll('.voie-select-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    selector.appendChild(btn);
+  });
+})();
+
+// ── MODAL ──
+function openModal(v) {
+  document.getElementById('modal-icon').textContent = v.icon;
+  document.getElementById('modal-name').textContent = v.name;
+  document.getElementById('modal-dieu').textContent = `Dieu·esse : ${v.dieu} · ${v.kingdom}`;
+  document.getElementById('modal-desc').textContent = v.desc;
+  document.getElementById('modal-traits').innerHTML = v.traits.map(t=>`<span class="trait">${t}</span>`).join('');
+  document.getElementById('modal-jouer').textContent = v.jouer;
+  document.getElementById('modal-quote').textContent = v.quote;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e) { if (e.target === document.getElementById('modal')) closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modal').classList.remove('open'); }
+
+// ── QUIZ ──
+let currentStep = 0;
+let scores = {};
+VOIES.forEach(v => scores[v.id] = 0);
+const steps = document.querySelectorAll('.quiz-step');
+const totalSteps = steps.length;
+
+function updateProgress() {
+  document.getElementById('progress-fill').style.width = ((currentStep / totalSteps) * 100) + '%';
+  document.getElementById('quiz-progress-text').textContent = `Question ${currentStep + 1} / ${totalSteps}`;
+  document.getElementById('quiz-prev').style.display = currentStep > 0 ? 'block' : 'none';
+}
+
+document.querySelectorAll('.quiz-option').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const parent = this.closest('.quiz-step');
+    parent.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+    document.getElementById('quiz-next').disabled = false;
+    document.getElementById('quiz-progress-text').textContent = `Question ${currentStep + 1} / ${totalSteps}`;
+  });
+});
+
+function nextStep() {
+  const step = steps[currentStep];
+  const selected = step.querySelector('.quiz-option.selected');
+  if (!selected) return;
+  const voie = selected.dataset.voie;
+  if (voie) scores[voie] = (scores[voie] || 0) + 1;
+
+  step.classList.remove('active');
+  currentStep++;
+
+  if (currentStep >= totalSteps) {
+    showResult();
+  } else {
+    steps[currentStep].classList.add('active');
+    document.getElementById('quiz-next').disabled = true;
+    updateProgress();
+  }
+}
+
+function prevStep() {
+  if (currentStep <= 0) return;
+  steps[currentStep].classList.remove('active');
+  currentStep--;
+  steps[currentStep].classList.add('active');
+  document.getElementById('quiz-next').disabled = false;
+  updateProgress();
+}
+
+function showResult() {
+  document.getElementById('quiz-nav').style.display = 'none';
+  steps.forEach(s => s.classList.remove('active'));
+  document.getElementById('progress-fill').style.width = '100%';
+
+  const winner = Object.entries(scores).sort((a,b) => b[1]-a[1])[0][0];
+  const voie = VOIES.find(v => v.id === winner);
+
+  document.getElementById('result-icon').textContent = voie.icon;
+  document.getElementById('result-name').textContent = voie.name;
+  document.getElementById('result-dieu').textContent = `Dieu·esse : ${voie.dieu}`;
+  document.getElementById('result-desc').textContent = voie.desc;
+  document.getElementById('result-quote').textContent = voie.quote;
+  document.getElementById('quiz-result').style.display = 'block';
+
+  // pré-sélectionner dans la fiche
+  document.querySelectorAll('.voie-select-btn').forEach(b => {
+    if (b.dataset.voie === winner) b.classList.add('selected');
+    else b.classList.remove('selected');
+  });
+}
+
+function resetQuiz() {
+  VOIES.forEach(v => scores[v.id] = 0);
+  currentStep = 0;
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-nav').style.display = 'flex';
+  steps.forEach(s => { s.classList.remove('active'); s.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected')); });
+  steps[0].classList.add('active');
+  document.getElementById('quiz-next').disabled = true;
+  updateProgress();
+}
+
+function scrollToFiche() {
+  document.getElementById('fiche').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── COPY FICHE ──
+function copyFiche() {
+  const voieSelected = document.querySelector('.voie-select-btn.selected');
+  const voieName = voieSelected ? voieSelected.textContent.trim() : '—';
+
+  const fiche = `
+╔══════════════════════════════════════╗
+     FICHE PERSONNAGE — PANTHÉON DES VOIES
+╚══════════════════════════════════════╝
+
+【 IDENTITÉ 】
+Nom complet : ${val('f-nom')} ${val('f-prenom')}
+Nom de divinité : ${val('f-divinite')}
+Statut : ${val('f-statut')}
+
+【 VOIE 】
+Voie : ${voieName}
+Rapport à sa Voie :
+${val('f-rapport-voie')}
+
+【 ROYAUME & ORIGINE 】
+Royaume : ${val('f-royaume')}
+Univers d'origine : ${val('f-origine')}
+Rôle : ${val('f-role')}
+
+【 PERSONNALITÉ 】
+En surface :
+${val('f-surface')}
+
+En profondeur :
+${val('f-profond')}
+
+MBTI : ${val('f-mbti')}
+
+【 BACKGROUND 】
+Histoire :
+${val('f-histoire')}
+
+Blessure centrale :
+${val('f-blessure')}
+
+【 LIENS & RELATIONS 】
+Liens :
+${val('f-liens')}
+
+Relation à Kenjaku :
+${val('f-kenjaku')}
+
+【 OBJECTIF NARRATIF 】
+Ce qu'il·elle veut vraiment :
+${val('f-objectif')}
+
+Arc potentiel :
+${val('f-arc')}
+
+Ce que je veux jouer :
+${val('f-envie')}
+`.trim();
+
+  navigator.clipboard.writeText(fiche).then(() => {
+    document.getElementById('copy-feedback').textContent = 'Fiche copiée — colle-la dans Discord ✦';
+    setTimeout(() => document.getElementById('copy-feedback').textContent = '', 3000);
+  }).catch(() => {
+    document.getElementById('copy-feedback').textContent = 'Sélectionne et copie manuellement.';
+  });
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? (el.value.trim() || '—') : '—';
+}
+</script>
+</body>
+</html>

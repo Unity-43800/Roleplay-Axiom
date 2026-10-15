@@ -942,6 +942,7 @@
             <option>Demi-dieu / Demi-déesse</option>
             <option>Héritier·e divin·e</option>
             <option>Émanateur·trice</option>
+            <option>Immortel.e</option>
             <option>Mortel·le</option>
             <option>Autre</option>
           </select>
@@ -1169,7 +1170,7 @@ const VOIES = [
     quote: '« Ce qui est beau mérite d\'exister, même un instant. »'
   },
   {
-    id: 'Souvenir', icon: '⌛', name: 'Le Souvenir', dieu: 'Undertaker', kingdom: 'Axiøm',
+    id: 'Souvenir', icon: '⌛', name: 'Le Souvenir', dieu: 'Undertaker', kingdom: 'Jardin de la mémoire',
     keywords: 'Rappel · Mémoire · Traces du passé',
     desc: 'Refuser que le passé disparaisse. Donner une éternité aux expériences vécues. Ce dieu croit que l\'identité survit tant que quelqu\'un se souvient.',
     traits: ['Silencieux', 'Contemplatif', 'Nostalgique', 'Poétique', 'Mélancolique'],
@@ -1193,7 +1194,7 @@ const VOIES = [
     quote: '« Si tout doit finir… dansons jusqu\'à ce que l\'univers s\'effondre. »'
   },
   {
-    id: 'Voracité', icon: '🫗', name: 'La Voracité', dieu: '???', kingdom: 'Inconnu',
+    id: 'Voracité', icon: '🫗', name: 'La Voracité', dieu: 'Kuya', kingdom: 'Inconnu',
     keywords: 'Faim · Vol · Obsession',
     desc: 'Dévorer pour se définir. Tout ce qui existe est une ressource. Ce dieu n\'a pas de fin, seulement une faim éternelle. L\'identité est ce qui a été consommé.',
     traits: ['Intense', 'Tourmenté', 'Insatiable', 'Jamais satisfait', 'Monstrueux dans sa perte de limites'],
@@ -1201,7 +1202,7 @@ const VOIES = [
     quote: '« Si je t\'aime, je te dévore. Si je vis, c\'est pour tout prendre. »'
   },
   {
-    id: 'Équilibre', icon: '⚖️', name: 'L\'Équilibre', dieu: '▉▉▉', kingdom: 'Axiøm',
+    id: 'Équilibre', icon: '⚖️', name: 'L\'Équilibre', dieu: 'Imu Nerona', kingdom: 'Axiøm',
     keywords: 'Balance · Loi · Neutralité',
     desc: 'Maintenir la balance cosmique. Ni trop, ni trop peu. Ce dieu sacrifie sans haine pour éviter les extrêmes. La justice comme mécanique froide.',
     traits: ['Impassible', 'Analytique', 'Détaché en surface', 'Ne cherche ni le bien ni le mal', 'Accepte le sacrifice comme variable'],
@@ -1373,7 +1374,7 @@ function copyFiche() {
 
 【 IDENTITÉ 】
 Nom complet : ${val('f-nom')} ${val('f-prenom')}
-Nom de divinité : ${val('f-divinite')}
+Nom de divinité / surnom : ${val('f-divinite')}
 Statut : ${val('f-statut')}
 
 【 VOIE 】
